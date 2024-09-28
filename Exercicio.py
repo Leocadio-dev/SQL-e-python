@@ -86,7 +86,9 @@ def criarTabelas():
             FOREIGN KEY (CODCONTATO) REFERENCES contatos(CODCONTATO)
         """
         cursor.execute(sql)
-
+        
+        # Fechando conexão com o banco
+        conexao.close()
     
 
 

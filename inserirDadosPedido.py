@@ -1,7 +1,7 @@
 # Bibliotecas importadas
 import os
 from datetime import datetime, date
-import locale
+
 import sqlite3 as sqlite
 
 # Criando conexão com o banco (se não existente, cria o banco)
@@ -10,8 +10,7 @@ conexao = sqlite.connect("loja.db")
 # Criando a conexão para execução de queries
 cursor = conexao.cursor()
 
-# Setando como UTF-8 pra todas as categorias 
-locale.setlocale(locale.LC_ALL, "pt_BR.UTF-8")
+
 
 def inserirDadosPedido():
     # Limpando o console pra melhor visualização
@@ -33,16 +32,58 @@ def inserirDadosPedido():
         
         # Verificando se o id existe
         sql = """
-            SELECT IDCLIENTE FROM CLIENTES WHERE CPF = ?;
+            SELECT IDCLIENTE FROM CLIENTE WHERE CPF = ?;
         """
+        # Fazendo a query no banco
+        cursor.execute(sql, (cpfCliente, ))
         
+        # Armazenando o resultado da primeira linha da query
+        resultadoConsulta = cursor.fetchone()
+
+        # Caso não tenha nada, o fetchone retorna None por padrão
+        if resultadoConsulta == None:
+            print(f"Não foi possível encontrar um cliente com o cpf {cpfCliente} no banco de dados.")
+        else:
+            # Armazena o id contido na query
+            # A query fetchone retorna uma tupla somente, já o fetchall retorna uma lista com tuplas
+            idCliente = resultadoConsulta[0]
+            
+            # Buscando o código da mercadoria
+            codMerc = int(input("Digite o código da mercadoria "))
+            
+            # Verificando se o codigo de mercadoria existe
+            sql = """
+                SELECT CODMERC FROM MERCADORIA WHERE CODMERC = ?;
+            """
+            # Fazendo a query no banco
+            cursor.execute(sql, (codMerc, ))
+            resultadoConsulta = cursor.fetchone()
+            if resultadoConsulta == None:
+                print(f"Não foi possível encontrar uma mercadoria com o código {codMerc} no banco de dados.")
+                
+                
+            else:
+                # Se os códigos existirem, o programa executará a query de inserção
+                try:
+                    sql = """
+                        INSERT INTO PEDIDO(NUMNOTAFISCAL, VALORTOTAL, DATAPEDIDO, IDCLIENTE, CODMERC) VALUES(
+                            ?,?,?,?,?
+                        )
+                    """
+                    cursor.execute(sql, (numNotaFiscal, valorTotal, dataPedido, idCliente, codMerc, ))
+                    
+                    # Insere as informações no banco
+                    conexao.commit()
+                except Exception as e:
+                    print(f"Erro: {e}")
+                
+                            
         
-        
-    return 0
+        # Fechando o banco
+    conexao.close()
 
 
 inserirDadosPedido()
-
 
     # Segunda forma de adicionar a data do pedido (usuário inputando)
     # # Usando desta forma, pedir para o usuário digitar o dia, mês e ano no formato dd/mm/yyyy e fazer verificação se ele digitou assim usando o strftime talvez
