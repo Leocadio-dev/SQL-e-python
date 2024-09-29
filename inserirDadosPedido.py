@@ -20,6 +20,7 @@ def inserirDadosPedido():
     
     for i in range(quantidadeRegistros):
 
+
         # Criando variáveis de input
         numNotaFiscal = input("Digite o número da nota fiscal\n")
         numNotaFiscal = "NF" + numNotaFiscal
@@ -52,7 +53,7 @@ def inserirDadosPedido():
                
             
         
-        valorTotal = round(float(input("Digite o valor total do produto\n")), 2)
+        valorTotal = round(float(input("Digite o valor total do pedido\n")), 2)
 
         # Adicionando a data do pedido automaticamente
         dataPedido = date.today().strftime("%d/%m/%Y")

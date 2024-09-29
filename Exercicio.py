@@ -65,7 +65,7 @@ def criarTabelas():
                     NOMEFANTASIA STRING NOT NULL,
                     CNPJ STRING NOT NULL,
                     ENDERECO STRING NOT NULL,
-                    TELEFONECENTRAL STRING NOT NULL,
+                    TELCENTRAL STRING NOT NULL,
                     CODCONTATO INTEGER NOT NULL,
                     
                     FOREIGN KEY (CODCONTATO) REFERENCES contatos(CODCONTATO)
@@ -77,12 +77,9 @@ def criarTabelas():
         # Tabela Contato
         sql = """
                 CREATE TABLE IF NOT EXISTS contatos(
-                    CODCONTATO INTEGER PRIMARY KEY,
+                    CODCONTATO INTEGER PRIMARY KEY AUTOINCREMENT,
                     TELEFONE STRING NOT NULL,
-                    EMAIL STRING NOT NULL,
-                    CODFORNEC INTEGER NOT NULL,
-                    
-                    FOREIGN KEY (CODFORNEC) REFERENCES fornecedor(CODFORNEC)
+                    EMAIL STRING NOT NULL
                 )
 
         """
@@ -98,7 +95,7 @@ def criarTabelas():
 
 # Usa o try catch pra poder executar a função. Caso já exista o banco, ele não cria 
 try:  
-    bancoCriado = criarTabelas()
+    criarTabelas()
     
 # Verificando se o banco existe. Existindo, pula a execução e não retorna erro
 except sqlite.OperationalError:
