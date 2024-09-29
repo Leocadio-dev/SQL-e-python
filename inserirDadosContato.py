@@ -27,7 +27,7 @@ try:
         telefone, email, codfornec = capturarDadosUsuario()
         insertContato(telefone,email,codfornec)
         resposta = input("Deseja continuar inserindo dados? [S/N] (caso algo diferente de 'S' seja colocado, ele automaticamente considerara como N)")
-        if resposta != 'S':
+        if resposta != 'S' and resposta != 's':
             verificaContinuacaoPrograma = False
     conn.close()
     cursor = conn.close()
