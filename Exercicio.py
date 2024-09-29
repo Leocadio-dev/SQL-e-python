@@ -6,19 +6,25 @@ conexao = sqlite.connect("loja.db")
 # Criando a conexão para execução de queries
 cursor = conexao.cursor()
 
+# O Pragma modifica o comportamento do banco de dados. É preciso ativar as chaves estrangeiras a partir deste código
+cursor.execute("PRAGMA foreign_keys = ON")
+
 def criarTabelas():
 
     # Criando tabela pedido
         
         # Tabela Pedido
         sql = """
-                CREATE TABLE pedido(
+                CREATE TABLE IF NOT EXISTS pedido(
                     IDPEDIDO INTEGER PRIMARY KEY AUTOINCREMENT,
                     NUMNOTAFISCAL STRING NOT NULL,
                     VALORTOTAL NUMERIC NOT NULL,
                     DATAPEDIDO DATE NOT NULL,
                     IDCLIENTE INTEGER NOT NULL,
-                    CODMERC INTEGER NOT NULL
+                    CODMERC INTEGER NOT NULL,
+                    
+                    FOREIGN KEY (IDCLIENTE) REFERENCES cliente(IDCLIENTE),
+                    FOREIGN KEY (CODMERC) REFERENCES mercadoria(CODMERC)
                 )
 
         """
@@ -26,7 +32,7 @@ def criarTabelas():
      
         # Tabela Mercadoria
         sql = """
-                CREATE TABLE mercadoria(
+                CREATE TABLE IF NOT EXISTS mercadoria(
                     CODMERC INTEGER PRIMARY KEY,
                     DESCMERC STRING NOT NULL,
                     PRECOMERC NUMERIC NOT NULL,
@@ -38,7 +44,7 @@ def criarTabelas():
         
         # Tabela Cliente
         sql = """
-                CREATE TABLE cliente(
+                CREATE TABLE IF NOT EXISTS cliente(
                     IDCLIENTE INTEGER PRIMARY KEY AUTOINCREMENT,
                     CPF STRING NOT NULL,
                     RG STRING,
@@ -53,15 +59,16 @@ def criarTabelas():
 
         # Tabela Fornecedor
         sql = """
-                CREATE TABLE fornecedor(
+                CREATE TABLE IF NOT EXISTS fornecedor(
                     CODFORNEC INTEGER PRIMARY KEY,
                     RAZSOC STRING NOT NULL,
                     NOMEFANTASIA STRING NOT NULL,
                     CNPJ STRING NOT NULL,
                     ENDERECO STRING NOT NULL,
                     TELEFONECENTRAL STRING NOT NULL,
-                    CODCONTATO INTEGER NOT NULL
+                    CODCONTATO INTEGER NOT NULL,
                     
+                    FOREIGN KEY (CODCONTATO) REFERENCES contatos(CODCONTATO)
                 )
 
         """
@@ -69,24 +76,18 @@ def criarTabelas():
         
         # Tabela Contato
         sql = """
-                CREATE TABLE contatos(
+                CREATE TABLE IF NOT EXISTS contatos(
                     CODCONTATO INTEGER PRIMARY KEY,
                     TELEFONE STRING NOT NULL,
                     EMAIL STRING NOT NULL,
-                    CODFORNEC INTEGER NOT NULL
+                    CODFORNEC INTEGER NOT NULL,
+                    
+                    FOREIGN KEY (CODFORNEC) REFERENCES fornecedor(CODFORNEC)
                 )
 
         """
         cursor.execute(sql)
 
-        sql = """
-            FOREIGN KEY (IDCLIENTE) REFERENCES cliente(IDCLIENTE),
-            FOREIGN KEY (IDMERC) REFERENCES mercadoria(CODMERC),
-            FOREIGN KEY (CODFORNEC) REFERENCES fornecedor(CODFORNEC),
-            FOREIGN KEY (CODCONTATO) REFERENCES contatos(CODCONTATO)
-        """
-        cursor.execute(sql)
-        
         # Fechando conexão com o banco
         conexao.close()
     
