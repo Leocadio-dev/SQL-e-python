@@ -1,4 +1,4 @@
-# Projeto de primeira transferência de dados entre CSV e um banco de dados
+# Projeto de primeira transferência de dados entre o input do usuário e um banco de dados
 
 ### Breve resumo
 
