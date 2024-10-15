@@ -1,6 +1,6 @@
-# Projeto de SQL e Python
+# Projeto de primeira transferência de dados entre CSV e um banco de dados
 
-### Conceito do projeto
+### Breve resumo
 
 O projeto consiste em uma criação e manipulação de banco de dados através do Python 3 com SQLITE
 
